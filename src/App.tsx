@@ -1,8 +1,17 @@
 import React from "react";
 import Labs from "./Labs";
+import { HashRouter, Navigate, Route, Routes } from "react-router";
 export default function App() {
   return (
-    <div>
-      <Labs />
-    </div>
-);}
+    <HashRouter>
+      <div>
+        <Routes>
+          <Route path="/" element={<Navigate to="/Labs" />} />
+          <Route path="/Labs/*" element={<Labs />} />
+          <Route path="/Kambaz/*" element={<h1>Kambaz</h1>} />
+          <Route path="/Project" element={<h1>Prdject</h1>} />
+        </Routes>
+      </div>
+    </HashRouter>
+  );
+}
