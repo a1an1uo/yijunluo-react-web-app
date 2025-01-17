@@ -1,23 +1,19 @@
 import Lab1 from "./Lab1";
+import { Route, Routes, Navigate } from "react-router";
+import TOC from "./TOC";
 import Lab2 from "./Lab2";
+import Lab3 from "./Lab3";
 export default function Labs() {
   return (
-    <div id="wd-labs">
+    <div>
       <h1>Labs</h1>
-      <Lab1 />
-      <Lab2 />
-      <div id="wd-images">
-        <h4>Image tag</h4>
-        Loading an image from the internet: <br />
-        <img id="wd-starship" width="400px"
-          src="https://www.staradvertiser.com/wp-content/uploads/2021/08/web1_Starship-gap2.jpg" />
-        <br />
-        Loading a local image:
-        <br />
-        <img id="wd-teslabot" src="images/teslabot.jpg" height="200px" />
-      </div>
-
+      <TOC />
+      <Routes>
+        <Route path="/" element={<Navigate to="Lab1" />} />
+        <Route path="Lab1" element={<Lab1 />} />
+        <Route path="Lab2/*" element={<Lab2 />} />
+        <Route path="Lab3" element={<Lab3 />} />
+      </Routes>
     </div>
+);}
 
-  );
-}
