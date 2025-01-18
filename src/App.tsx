@@ -1,5 +1,6 @@
 import React from "react";
 import Labs from "./Labs";
+import Kambaz from "./Kambaz";
 import { HashRouter, Navigate, Route, Routes } from "react-router";
 export default function App() {
   return (
@@ -8,8 +9,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/Labs" />} />
           <Route path="/Labs/*" element={<Labs />} />
-          <Route path="/Kambaz/*" element={<h1>Kambaz</h1>} />
-          <Route path="/Project" element={<h1>Prdject</h1>} />
+          <Route path="/Kambaz/*" element={<Kambaz />} />
         </Routes>
       </div>
     </HashRouter>
