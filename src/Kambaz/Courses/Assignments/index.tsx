@@ -10,11 +10,27 @@ export default function Assignments() {
             <ul id="wd-assignment-list">
                 <li className="wd-assignment-list-item">
                     <a href="#/Kambaz/Courses/1234/Assignments/123"
-                        className="wd-assignment-link" >
+                        className="wd-assignment-link">
                         A1 - ENV + HTML
-                    </a> </li>
+                    </a>
+                </li>
                 <li className="wd-assignment-list-item">
-                    {/* Complete On Your Own */}
+                    <a href="#/Kambaz/Courses/1234/Assignments/124"
+                        className="wd-assignment-link">
+                        A2 - CSS Basics
+                    </a>
+                </li>
+                <li className="wd-assignment-list-item">
+                    <a href="#/Kambaz/Courses/1234/Assignments/125"
+                        className="wd-assignment-link">
+                        A3 - JavaScript Intro
+                    </a>
+                </li>
+                <li className="wd-assignment-list-item">
+                    <a href="#/Kambaz/Courses/1234/Assignments/126"
+                        className="wd-assignment-link">
+                        A4 - React Components
+                    </a>
                 </li>
             </ul>
         </div>

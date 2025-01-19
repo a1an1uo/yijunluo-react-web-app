@@ -16,7 +16,30 @@ export default function AssignmentEditor() {
                         <input id="wd-points" value={100} />
                     </td>
                 </tr>
-                {/* Complete on your own */}
+                <tr>
+                    <td align="right" valign="top">
+                        <label htmlFor="wd-due-date">Due Date</label>
+                    </td>
+                    <td>
+                        <input type="date" id="wd-due-date" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" valign="top">
+                        <label htmlFor="wd-available-from">Available From</label>
+                    </td>
+                    <td>
+                        <input type="date" id="wd-available-from" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" valign="top">
+                        <label htmlFor="wd-available-until">Available Until</label>
+                    </td>
+                    <td>
+                        <input type="date" id="wd-available-until" />
+                    </td>
+                </tr>
             </table>
         </div>
     );
