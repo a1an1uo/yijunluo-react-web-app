@@ -1,4 +1,3 @@
-import React from "react";
 import Labs from "./Labs";
 import Kambaz from "./Kambaz";
 import { HashRouter, Navigate, Route, Routes } from "react-router";
