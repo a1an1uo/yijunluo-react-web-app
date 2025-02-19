@@ -5,8 +5,14 @@ import SearchBox from "./SearchBox";
 import AddGroupButton from "./AddGroupButton";
 import AddAssignmentButton from "./AddAssignmentButton";
 import AssignmentControlButtons from "./AssignmentsControlButtons";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
+import * as db from "../../Database";
 
 export default function Assignments() {
+    const { cid } = useParams();
+    const assignments = db.assignments;
+
     return (
         <div id="wd-assignments">
             <div className="d-flex justify-content-between mb-3">
@@ -23,34 +29,21 @@ export default function Assignments() {
                         <BsGripVertical className="me-2 fs-3" /> ASSIGNMENTS <AssignmentControlButtons />
                     </div>
                     <ListGroup className="wd-lessons rounded-0">
-                        <ListGroup.Item className="wd-lesson p-3 ps-1">
-                            <a href="#/Kambaz/Courses/1234/Assignments/123" className="wd-assignment-link">
-                                <BsGripVertical className="me-2 fs-3" /> A1 <LessonControlButtons />
-                                <div className="text-muted small">
-                                    Due: 2025-02-10, Start: 09:00 AM, Points: 100
-                                </div>
-                            </a>
-                        </ListGroup.Item>
-                        <ListGroup.Item className="wd-lesson p-3 ps-1">
-                            <a href="#/Kambaz/Courses/1234/Assignments/124" className="wd-assignment-link">
-                                <BsGripVertical className="me-2 fs-3" /> A2 <LessonControlButtons />
-                                <div className="text-muted small">
-                                    Due: 2025-02-15, Start: 10:00 AM, Points: 100
-                                </div>
-                            </a>
-                        </ListGroup.Item>
-                        <ListGroup.Item className="wd-lesson p-3 ps-1">
-                            <a href="#/Kambaz/Courses/1234/Assignments/125" className="wd-assignment-link">
-                                <BsGripVertical className="me-2 fs-3" /> A3 <LessonControlButtons />
-                                <div className="text-muted small">
-                                    Due: 2025-02-20, Start: 11:00 AM, Points: 100
-                                </div>
-                            </a>
-                        </ListGroup.Item>
+                        {assignments
+                            .filter((assignment) => assignment.course === cid)
+                            .map((assignment) => (
+                                <ListGroup.Item key={assignment._id} className="wd-lesson p-3 ps-1">
+                                    <Link to={`/Kambaz/Courses/${cid}/Assignments/${assignment._id}`} className="wd-assignment-link">
+                                        <BsGripVertical className="me-2 fs-3" /> {assignment.title} <LessonControlButtons />
+                                        <div className="text-muted small">
+                                            Due: {assignment.dueDate}, Start: {assignment.startTime}, Points: {assignment.points}
+                                        </div>
+                                    </Link>
+                                </ListGroup.Item>
+                            ))}
                     </ListGroup>
                 </ListGroup.Item>
             </ListGroup>
         </div>
     );
 }
-
