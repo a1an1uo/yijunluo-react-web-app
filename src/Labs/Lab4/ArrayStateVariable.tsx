@@ -9,7 +9,7 @@ export default function ArrayStateVariable() {
   };
 
   const deleteElement = (index: number) => {
-    setArray(array.filter((item, i) => i !== index));
+    setArray(array.filter((_item, i) => i !== index));
   };
 
   return (

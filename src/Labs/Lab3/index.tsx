@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AddingAndRemovingToFromArrays from "./AddingAndRemovingToFromArrays";
 import ArrayIndexAndLength from "./ArrayIndexAndLength";
 import ArrowFunctions from "./ArrowFunctions";
@@ -30,41 +31,53 @@ import Add from "./Add";
 import Square from "./Square";
 import Highlight from "./Highlight";
 import PathParameters from "./PathParameters";
+import { ListGroup } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 
 export default function Lab3() {
+  const { todos } = useSelector((state: any) => state.todosReducer);
   console.log('Hello World!');
-  return(
+  return (
     <div id="wd-lab3">
       <h3>Lab 3</h3>
-      <VariablesAndConstants/>
-      <VariableTypes/>
-      <BooleanVariables/>
-      <IfElse/>
-      <TernaryOperator/>
-      <ConditionalOutputIfElse/>  
-      <ConditionalOutputInline/>
-      <LegacyFunctions/>
-      <ArrowFunctions/>
-      <ImpliedReturn/>
-      <TemplateLiterals/>
-      <SimpleArrays/>
-      <ArrayIndexAndLength/>
-      <AddingAndRemovingToFromArrays/>
-      <ForLoops/>
-      <FindFunction/>
-      <FindIndex/>
-      <FilterFunction/>
-      <JsonStringify/>
-      <House/>
-      <TodoItem/>
-      <TodoList/>
-      <Spreading/>
-      <Destructing/>
-      <FunctionDestructing/>
-      <DestructingImports/>
-      <Classes/>
-      <Styles/>
+      <ListGroup>
+        {todos.map((todo: any) => (
+          <ListGroup.Item key={todo.id}>
+            {todo.title}
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+      <hr />
+
+      <VariablesAndConstants />
+      <VariableTypes />
+      <BooleanVariables />
+      <IfElse />
+      <TernaryOperator />
+      <ConditionalOutputIfElse />
+      <ConditionalOutputInline />
+      <LegacyFunctions />
+      <ArrowFunctions />
+      <ImpliedReturn />
+      <TemplateLiterals />
+      <SimpleArrays />
+      <ArrayIndexAndLength />
+      <AddingAndRemovingToFromArrays />
+      <ForLoops />
+      <FindFunction />
+      <FindIndex />
+      <FilterFunction />
+      <JsonStringify />
+      <House />
+      <TodoItem />
+      <TodoList />
+      <Spreading />
+      <Destructing />
+      <FunctionDestructing />
+      <DestructingImports />
+      <Classes />
+      <Styles />
       <Add a={3} b={4} />
       <h4>Square of 4</h4>
       <Square>4</Square>
@@ -72,8 +85,8 @@ export default function Lab3() {
       <Highlight>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipitratione eaque illo minus cum, saepe totam
         vel nihil repellat nemo explicabo excepturi consectetur. Modi omnis minus sequi maiores, provident voluptates.
-     </Highlight>
-     <PathParameters/>
+      </Highlight>
+      <PathParameters />
     </div>
   );
 }
