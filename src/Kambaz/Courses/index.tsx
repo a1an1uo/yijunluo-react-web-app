@@ -1,5 +1,4 @@
-//import CourseNavigation from "./Navigation";
-import { courses } from "../Database";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
 import Modules from "./Modules";
 import Home from "./Home";
@@ -9,7 +8,7 @@ import { FaAlignJustify } from "react-icons/fa";
 import CourseNavigation from "./Navigation";
 import PeopleTable from "./People/Table";
 
-export default function Courses() {
+export default function Courses({ courses }: { courses: any[]; }) {
     const { cid } = useParams();
     const course = courses.find((course) => course._id === cid);
     const { pathname } = useLocation();

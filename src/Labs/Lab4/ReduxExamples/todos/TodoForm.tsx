@@ -8,14 +8,20 @@ export default function TodoForm() {
   const dispatch = useDispatch();
 
   return (
-    <ListGroup.Item>
-      <Button onClick={() => dispatch(addTodo(todo))}
-              id="wd-add-todo-click"> Add </Button>
-      <Button onClick={() => dispatch(updateTodo(todo))}
-              id="wd-update-todo-click"> Update </Button>
+    <ListGroup.Item className="d-flex align-items-center">
       <FormControl
         value={todo.title}
-        onChange={(e) => dispatch(setTodo({ ...todo, title: e.target.value }))}/>
+        onChange={(e) => dispatch(setTodo({ ...todo, title: e.target.value }))}
+        className="me-2"
+        placeholder="Todo Title"
+      />
+      <Button onClick={() => dispatch(updateTodo(todo))}
+        id="wd-update-todo-click"
+        variant="warning"
+        className="me-2"> Update </Button>
+      <Button onClick={() => dispatch(addTodo(todo))}
+        id="wd-add-todo-click"
+        variant="success"> Add </Button>
     </ListGroup.Item>
   );
 }
