@@ -1,45 +1,93 @@
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 import * as db from "../../Database";
+import { useDispatch } from "react-redux";
+import { addAssignment } from "./reducer";
+import { useState } from "react";
 
 export default function AssignmentEditor() {
+    const dispatch = useDispatch();
     const { cid, aid } = useParams();
     const assignment = db.assignments.find((assignment) => assignment._id === aid);
+
+    const [title, setTitle] = useState(assignment?.title || "");
+    const [description, setDescription] = useState(assignment?.description || "");
+    const [points, setPoints] = useState(assignment?.points || 0);
+    const [dueDate, setDueDate] = useState(assignment?.dueDate || "");
+    const [startTime, setStartTime] = useState(assignment?.startTime || "");
+    const [availableUntil, setAvailableUntil] = useState("");
+
+    const saveAssignment = () => {
+        dispatch(addAssignment({
+            title,
+            description,
+            points,
+            dueDate,
+            startTime,
+            availableUntil,
+            course: cid,
+        }));
+    };
 
     return (
         <div id="wd-assignments-editor">
             <Form>
                 <Form.Group controlId="wd-name" className="mb-3">
                     <Form.Label>Assignment Name</Form.Label>
-                    <Form.Control type="text" defaultValue={assignment?.title} />
+                    <Form.Control
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
                 </Form.Group>
                 <Form.Group controlId="wd-description" className="mb-3">
                     <Form.Label>Description</Form.Label>
-                    <Form.Control as="textarea" rows={3} defaultValue={assignment?.description} />
+                    <Form.Control
+                        as="textarea"
+                        rows={3}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
                 </Form.Group>
                 <br />
                 <Form.Group as={Row} controlId="wd-points" className="mb-3">
                     <Form.Label column sm={2}>Points</Form.Label>
                     <Col sm={10}>
-                        <Form.Control type="number" defaultValue={assignment?.points} />
+                        <Form.Control
+                            type="number"
+                            value={points}
+                            onChange={(e) => setPoints(Number(e.target.value))}
+                        />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="wd-due-date" className="mb-3">
                     <Form.Label column sm={2}>Due Date</Form.Label>
                     <Col sm={10}>
-                        <Form.Control type="date" defaultValue={assignment?.dueDate} />
+                        <Form.Control
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.target.value)}
+                        />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="wd-available-from" className="mb-3">
                     <Form.Label column sm={2}>Available From</Form.Label>
                     <Col sm={10}>
-                        <Form.Control type="date" defaultValue={assignment?.startTime} />
+                        <Form.Control
+                            type="date"
+                            value={startTime}
+                            onChange={(e) => setStartTime(e.target.value)}
+                        />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} controlId="wd-available-until" className="mb-3">
                     <Form.Label column sm={2}>Available Until</Form.Label>
                     <Col sm={10}>
-                        <Form.Control type="date" />
+                        <Form.Control
+                            type="date"
+                            value={availableUntil}
+                            onChange={(e) => setAvailableUntil(e.target.value)}
+                        />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} className="mb-3">
@@ -48,7 +96,9 @@ export default function AssignmentEditor() {
                             <Button variant="secondary" className="me-2">Cancel</Button>
                         </Link>
                         <Link to={`/Kambaz/Courses/${cid}/Assignments`}>
-                            <Button type="submit">Save Assignment</Button>
+                            <Button type="submit" onClick={saveAssignment}>
+                                Save Assignment
+                            </Button>
                         </Link>
                     </Col>
                 </Form.Group>

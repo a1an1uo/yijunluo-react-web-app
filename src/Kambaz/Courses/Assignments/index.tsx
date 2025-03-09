@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ListGroup } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
 import LessonControlButtons from "../Modules/LessonControlButtons";
@@ -7,11 +8,11 @@ import AddAssignmentButton from "./AddAssignmentButton";
 import AssignmentControlButtons from "./AssignmentsControlButtons";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import * as db from "../../Database";
+import { useSelector } from "react-redux";
 
 export default function Assignments() {
     const { cid } = useParams();
-    const assignments = db.assignments;
+    const { assignments } = useSelector((state: any) => state.assignmentsReducer);
 
     return (
         <div id="wd-assignments">
@@ -30,8 +31,8 @@ export default function Assignments() {
                     </div>
                     <ListGroup className="wd-lessons rounded-0">
                         {assignments
-                            .filter((assignment) => assignment.course === cid)
-                            .map((assignment) => (
+                            .filter((assignment: any) => assignment.course === cid)
+                            .map((assignment: any) => (
                                 <ListGroup.Item key={assignment._id} className="wd-lesson p-3 ps-1">
                                     <Link to={`/Kambaz/Courses/${cid}/Assignments/${assignment._id}`} className="wd-assignment-link">
                                         <BsGripVertical className="me-2 fs-3" /> {assignment.title} <LessonControlButtons />
