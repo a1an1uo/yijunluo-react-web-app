@@ -3,7 +3,7 @@ import { useState } from "react";
 import ModulesControls from "./ModulesControls";
 import { BsGripVertical } from "react-icons/bs";
 import ModuleControlButtons from "./ModuleControlButtons";
-import LessonControlButtons from "./LessonControlButtons";
+import LessonControlButtons from "./ModuleLessonControlButtons";
 import { useParams } from "react-router";
 import { FormControl } from "react-bootstrap";
 import { addModule, editModule, updateModule, deleteModule } from "./reducer";

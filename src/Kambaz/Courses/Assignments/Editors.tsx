@@ -1,14 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 import * as db from "../../Database";
-import { useDispatch } from "react-redux";
-import { addAssignment } from "./reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { addAssignment, updateAssignment } from "./reducer";
 import { useState } from "react";
 
 export default function AssignmentEditor() {
     const dispatch = useDispatch();
     const { cid, aid } = useParams();
-    const assignment = db.assignments.find((assignment) => assignment._id === aid);
+    //const assignment = db.assignments.find((assignment) => assignment._id === aid);
+    const assignments = useSelector((state: any) => state.assignmentsReducer);
+    console.log(db.assignments)
+    console.log(assignments.assignments)
+    const assignment = assignments.assignments.find((assignment: any) => assignment._id === aid);
 
     const [title, setTitle] = useState(assignment?.title || "");
     const [description, setDescription] = useState(assignment?.description || "");
@@ -18,7 +23,8 @@ export default function AssignmentEditor() {
     const [availableUntil, setAvailableUntil] = useState("");
 
     const saveAssignment = () => {
-        dispatch(addAssignment({
+        const assignmentData = {
+            _id: aid,
             title,
             description,
             points,
@@ -26,7 +32,13 @@ export default function AssignmentEditor() {
             startTime,
             availableUntil,
             course: cid,
-        }));
+        };
+
+        if (assignment) {
+            dispatch(updateAssignment(assignmentData));
+        } else {
+            dispatch(addAssignment(assignmentData));
+        }
     };
 
     return (

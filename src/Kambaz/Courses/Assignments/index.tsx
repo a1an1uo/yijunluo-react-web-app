@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ListGroup } from "react-bootstrap";
 import { BsGripVertical } from "react-icons/bs";
-import LessonControlButtons from "../Modules/LessonControlButtons";
+import LessonControlButtons from "./AssignmentLessonControlButtons";
 import SearchBox from "./SearchBox";
 import AddGroupButton from "./AddGroupButton";
 import AddAssignmentButton from "./AddAssignmentButton";
