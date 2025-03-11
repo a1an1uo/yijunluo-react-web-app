@@ -1,21 +1,22 @@
 import { IoEllipsisVertical } from "react-icons/io5";
 import GreenCheckmark from "../Modules/GreenCheckmark";
 import { FaTrash } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { deleteAssignment } from "./reducer"; // Adjust the import path as needed
-import { useParams } from "react-router";
+import DeleteDialog from "./DeleteDialog";
+import { useState } from "react";
 
-export default function LessonControlButtons() {
-    const dispatch = useDispatch();
-    const aid = useParams();
-
-    const handleDelete = () => {
-        dispatch(deleteAssignment(aid));
-    };
+export default function LessonControlButtons({ assignmentId, deleteAssignment }: {
+    assignmentId: string;
+    deleteAssignment: (assignmentId: string) => void;
+}) {
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     return (
         <div className="float-end">
-            <FaTrash className="text-danger me-2 mb-1" onClick={handleDelete} />
+            <FaTrash className="text-danger me-2 mb-1" onClick={handleShow} />
+            <DeleteDialog show={show} handleClose={handleClose} dialogTitle="Are sure you want to remove the assignment?"
+                assignmentId={assignmentId} deleteAssignment={deleteAssignment} />
             <GreenCheckmark />
             <IoEllipsisVertical className="fs-4" />
         </div>
