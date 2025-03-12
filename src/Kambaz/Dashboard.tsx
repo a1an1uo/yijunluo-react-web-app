@@ -57,6 +57,16 @@ export default function Dashboard({
         navigate(`/Kambaz/Courses/${courseId}/Home`);
     };
 
+    const displayCourses = currentUser.role === "FACULTY"
+        ? courses // Faculty always sees all courses
+        : (show ? courses : courses.filter((course) =>
+            enrollments.some(
+                (enrollment: any) =>
+                    enrollment.user === currentUser._id &&
+                    enrollment.course === course._id
+            )
+        ));
+
     return (
         <div id="wd-dashboard">
             <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
@@ -91,118 +101,86 @@ export default function Dashboard({
             <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
             <div id="wd-dashboard-courses">
                 <Row xs={1} md={5} className="g-4">
-                    {show ?
-                        (courses
-                            .map((course) => (
-                                <Col key={course._id} className="wd-dashboard-course" style={{ width: "300px" }}>
-                                    <Card>
-                                        {currentUser.role === "STUDENT" && (
-                                            isEnrolled(course._id) ? (
-                                                <Button
-                                                    variant="danger"
-                                                    size="sm"
-                                                    onClick={(event) => handleUnenroll(event, course._id)}
-                                                >
-                                                    Unenroll
-                                                </Button>
-                                            ) : (
-                                                <Button
-                                                    variant="success"
-                                                    size="sm"
-                                                    onClick={(event) => handleEnroll(event, course._id)}
-                                                >
-                                                    Enroll
-                                                </Button>
-                                            )
-                                        )}
-                                        <Link to={`/Kambaz/Courses/${course._id}/Home`} onClick={(event) => {
-                                            if (currentUser.role === "STUDENT" && !isEnrolled(course._id)) {
-                                                event.preventDefault(); // Prevent navigation if student is not enrolled
-                                                return;
-                                            }
-                                        }}
-                                            className="wd-dashboard-course-link text-decoration-none text-dark">
-                                            <Card.Img src={course.image || "/images/reactjs.jpg"} variant="top" width="100%" height={160} />
-                                            <Card.Body className="card-body">
-                                                <Card.Title className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                                                    {course.name} </Card.Title>
-                                                <Card.Text className="wd-dashboard-course-description overflow-hidden" style={{ height: "40px" }}>
-                                                    {course.description} </Card.Text>
-                                                <div className="d-flex justify-content-between">
-                                                    <Button variant="primary" size="sm" className="me-3" onClick={(event) => handleCourseNavigation(event, course._id)}>Go</Button>
-                                                    {currentUser?.role === "FACULTY" && (
-                                                        <>
-                                                            <Button variant="warning" size="sm" className="me-2" onClick={(event) => {
-                                                                event.preventDefault();
-                                                                setCourse(course);
-                                                            }} id="wd-edit-course-click">Edit</Button>
-                                                            <Button variant="danger" size="sm" onClick={(event) => {
-                                                                event.preventDefault();
-                                                                deleteCourse(course._id);
-                                                            }} id="wd-delete-course-click">Delete</Button>
-                                                        </>
-                                                    )}
-                                                </div>
-                                            </Card.Body>
-                                        </Link>
-                                    </Card>
-                                </Col>
-                            ))) : ((courses.filter((course) =>
-                                enrollments.some(
-                                    (enrollment: any) =>
-                                        enrollment.user === currentUser._id &&
-                                        enrollment.course === course._id
-                                ))
-                                .map((course) => (
-                                    <Col key={course._id} className="wd-dashboard-course" style={{ width: "300px" }}>
-                                        <Card>
-                                            {currentUser.role === "STUDENT" && (
-                                                isEnrolled(course._id) ? (
+                    {displayCourses.map((course) => (
+                        <Col key={course._id} className="wd-dashboard-course" style={{ width: "300px" }}>
+                            <Card>
+                                {currentUser.role === "STUDENT" && (
+                                    isEnrolled(course._id) ? (
+                                        <Button
+                                            variant="danger"
+                                            size="sm"
+                                            onClick={(event) => handleUnenroll(event, course._id)}
+                                        >
+                                            Unenroll
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="success"
+                                            size="sm"
+                                            onClick={(event) => handleEnroll(event, course._id)}
+                                        >
+                                            Enroll
+                                        </Button>
+                                    )
+                                )}
+                                <Link
+                                    to={`/Kambaz/Courses/${course._id}/Home`}
+                                    onClick={(event) => {
+                                        if (currentUser.role === "STUDENT" && !isEnrolled(course._id)) {
+                                            event.preventDefault(); // Prevent navigation if student is not enrolled
+                                            return;
+                                        }
+                                    }}
+                                    className="wd-dashboard-course-link text-decoration-none text-dark"
+                                >
+                                    <Card.Img src={course.image || "/images/reactjs.jpg"} variant="top" width="100%" height={160} />
+                                    <Card.Body className="card-body">
+                                        <Card.Title className="wd-dashboard-course-title text-nowrap overflow-hidden">
+                                            {course.name} </Card.Title>
+                                        <Card.Text className="wd-dashboard-course-description overflow-hidden" style={{ height: "40px" }}>
+                                            {course.description} </Card.Text>
+                                        <div className="d-flex justify-content-between">
+                                            <Button
+                                                variant="primary"
+                                                size="sm"
+                                                className="me-3"
+                                                onClick={(event) => handleCourseNavigation(event, course._id)}
+                                            >
+                                                Go
+                                            </Button>
+                                            {currentUser?.role === "FACULTY" && (
+                                                <>
+                                                    <Button
+                                                        variant="warning"
+                                                        size="sm"
+                                                        className="me-2"
+                                                        onClick={(event) => {
+                                                            event.preventDefault();
+                                                            setCourse(course);
+                                                        }}
+                                                        id="wd-edit-course-click"
+                                                    >
+                                                        Edit
+                                                    </Button>
                                                     <Button
                                                         variant="danger"
                                                         size="sm"
-                                                        onClick={(event) => handleUnenroll(event, course._id)}
+                                                        onClick={(event) => {
+                                                            event.preventDefault();
+                                                            deleteCourse(course._id);
+                                                        }}
+                                                        id="wd-delete-course-click"
                                                     >
-                                                        Unenroll
+                                                        Delete
                                                     </Button>
-                                                ) : (
-                                                    <Button
-                                                        variant="success"
-                                                        size="sm"
-                                                        onClick={(event) => handleEnroll(event, course._id)}
-                                                    >
-                                                        Enroll
-                                                    </Button>
-                                                )
+                                                </>
                                             )}
-                                            <Link to={`/Kambaz/Courses/${course._id}/Home`}
-                                                className="wd-dashboard-course-link text-decoration-none text-dark">
-                                                <Card.Img src={course.image || "/images/reactjs.jpg"} variant="top" width="100%" height={160} />
-                                                <Card.Body className="card-body">
-                                                    <Card.Title className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                                                        {course.name} </Card.Title>
-                                                    <Card.Text className="wd-dashboard-course-description overflow-hidden" style={{ height: "40px" }}>
-                                                        {course.description} </Card.Text>
-                                                    <div className="d-flex justify-content-between">
-                                                        <Button variant="primary" size="sm" className="me-3">Go</Button>
-                                                        {currentUser?.role === "FACULTY" && (
-                                                            <>
-                                                                <Button variant="warning" size="sm" className="me-2" onClick={(event) => {
-                                                                    event.preventDefault();
-                                                                    setCourse(course);
-                                                                }} id="wd-edit-course-click">Edit</Button>
-                                                                <Button variant="danger" size="sm" onClick={(event) => {
-                                                                    event.preventDefault();
-                                                                    deleteCourse(course._id);
-                                                                }} id="wd-delete-course-click">Delete</Button>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                </Card.Body>
-                                            </Link>
-                                        </Card>
-                                    </Col>
-                                ))))}
+                                        </div>
+                                    </Card.Body>
+                                </Link>
+                            </Card>
+                        </Col>
+                    ))}
                 </Row>
             </div>
         </div>
