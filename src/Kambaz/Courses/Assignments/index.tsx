@@ -43,7 +43,7 @@ export default function Assignments() {
                                     {currentUser?.role === 'FACULTY' &&
                                         (<LessonControlButtons assignmentId={assignment._id}
                                             deleteAssignment={(assignmentId) => dispatch(deleteAssignment(assignmentId))} />)}
-                                    {currentUser.role === 'faculty' ? (
+                                    {currentUser.role === 'FACULTY' ? (
                                         <Link to={`/Kambaz/Courses/${cid}/Assignments/${assignment._id}`} className="wd-assignment-link">
                                             <BsGripVertical className="me-2 fs-3" /> {assignment.title}
                                             <div className="text-muted small">
