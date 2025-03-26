@@ -51,6 +51,9 @@ export default function WorkingWithObjects() {
                 href={`${ASSIGNMENT_API_URL}/completed/${assignment.completed}`}>
                 Update Completion Status
             </a>
+            <h6 className="text-danger" >Bug: The checked attribute will go back to false every time you go from server back to web app(because it is 
+                set to be todo.completed and todo is a local const that set its completed to be false) but the checkbox will remain checked</h6>
+            <h6 className="text-danger" >Solution to the bug: click the box and click it again to make the checked to be true</h6>
             <div className="form-check">
                 <input
                     className="form-check-input"
