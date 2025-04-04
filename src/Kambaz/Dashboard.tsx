@@ -57,15 +57,15 @@ export default function Dashboard({
         navigate(`/Kambaz/Courses/${courseId}/Home`);
     };
 
-    const displayCourses = currentUser.role === "FACULTY"
-        ? courses // Faculty always sees all courses
-        : (show ? courses : courses.filter((course) =>
+    const displayCourses = show
+        ? courses // When show is true, display all courses
+        : courses.filter((course) =>
             enrollments.some(
                 (enrollment: any) =>
                     enrollment.user === currentUser._id &&
                     enrollment.course === course._id
             )
-        ));
+        );
 
     return (
         <div id="wd-dashboard">
@@ -101,7 +101,7 @@ export default function Dashboard({
             <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
             <div id="wd-dashboard-courses">
                 <Row xs={1} md={5} className="g-4">
-                    {courses.map((course) => (
+                    {displayCourses.map((course) => (
                         <Col key={course._id} className="wd-dashboard-course" style={{ width: "300px" }}>
                             <Card>
                                 {currentUser.role === "STUDENT" && (

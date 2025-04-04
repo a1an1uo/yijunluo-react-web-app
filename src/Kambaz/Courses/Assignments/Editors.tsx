@@ -5,6 +5,8 @@ import * as db from "../../Database";
 import { useDispatch, useSelector } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
 import { useState } from "react";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client"
 
 export default function AssignmentEditor() {
     const dispatch = useDispatch();
@@ -22,6 +24,26 @@ export default function AssignmentEditor() {
     const [startTime, setStartTime] = useState(assignment?.startTime || "");
     const [availableUntil, setAvailableUntil] = useState("");
 
+    const createAssignmentForCourse = async () => {
+        if (!cid) return;
+        const newAssignment = {
+            title,
+            description,
+            points,
+            dueDate,
+            startTime,
+            availableUntil,
+            course: cid,
+        };
+        const assignment = await coursesClient.createAssignmentForCourse(cid, newAssignment);
+        dispatch(addAssignment(assignment));
+    };
+
+    const modifyAssignment = async (assignment: any) => {
+        await assignmentsClient.updateAssignment(assignment);
+        dispatch(updateAssignment(assignment));
+    };
+
     const saveAssignment = () => {
         const assignmentData = {
             _id: aid,
@@ -35,9 +57,9 @@ export default function AssignmentEditor() {
         };
 
         if (assignment) {
-            dispatch(updateAssignment(assignmentData));
+            modifyAssignment(assignmentData);
         } else {
-            dispatch(addAssignment(assignmentData));
+            createAssignmentForCourse();
         }
     };
 

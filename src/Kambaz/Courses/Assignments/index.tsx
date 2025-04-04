@@ -9,14 +9,27 @@ import AssignmentControlButtons from "./AssignmentsControlButtons";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAssignment } from "./reducer";
+import { deleteAssignment, setAssignments } from "./reducer";
+import * as coursesClient from "../client";
+import * as assignmentsClient from "./client";
+import { useEffect } from "react";
 
 export default function Assignments() {
     const { cid } = useParams();
     const { assignments } = useSelector((state: any) => state.assignmentsReducer);
     const { currentUser } = useSelector((state: any) => state.accountReducer);
     const dispatch = useDispatch();
-
+    const fetchAssignments = async () => {
+        const assignments = await coursesClient.findAssignmentsForCourse(cid as string);
+        dispatch(setAssignments(assignments));
+    }
+    useEffect(() => {
+        fetchAssignments();
+    }, []);
+    const removeAssignment = async (assignmentId: string) => {
+        await assignmentsClient.deleteAssignment(assignmentId);
+        dispatch(deleteAssignment(assignmentId));
+    };
     return (
         <div id="wd-assignments">
             <div className="d-flex justify-content-between mb-3">
@@ -37,12 +50,12 @@ export default function Assignments() {
                     </div>
                     <ListGroup className="wd-lessons rounded-0">
                         {assignments
-                            .filter((assignment: any) => assignment.course === cid)
+                            // .filter((assignment: any) => assignment.course === cid)
                             .map((assignment: any) => (
                                 <ListGroup.Item key={assignment._id} className="wd-lesson p-3 ps-1">
                                     {currentUser?.role === 'FACULTY' &&
                                         (<LessonControlButtons assignmentId={assignment._id}
-                                            deleteAssignment={(assignmentId) => dispatch(deleteAssignment(assignmentId))} />)}
+                                            deleteAssignment={removeAssignment} />)}
                                     {currentUser.role === 'FACULTY' ? (
                                         <Link to={`/Kambaz/Courses/${cid}/Assignments/${assignment._id}`} className="wd-assignment-link">
                                             <BsGripVertical className="me-2 fs-3" /> {assignment.title}
