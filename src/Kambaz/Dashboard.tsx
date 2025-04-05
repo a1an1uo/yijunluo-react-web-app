@@ -2,8 +2,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Row, Col, Card, Button, FormControl } from "react-bootstrap";
-import { useState } from "react";
-import { enrollInCourse, unenrollFromCourse } from "./EnrollmentReducer";
+import { useEffect, useState } from "react";
+import { setEnrollments, unenrollFromCourse, enrollInCourse } from "./EnrollmentReducer";
+import * as enrollmentsClient from "./client"
 
 export default function Dashboard({
     courses, course, setCourse, addNewCourse,
@@ -24,20 +25,42 @@ export default function Dashboard({
         setShow(!show)
     }
 
-    const handleEnroll = (event: React.MouseEvent, courseId: string) => {
+    const fetchEnrollments = async () => {
+        const enrollments = await enrollmentsClient.findEnrollmentsForUser(currentUser);
+        dispatch(setEnrollments(enrollments));
+    }
+    useEffect(() => {
+        fetchEnrollments();
+    }, [currentUser]);
+
+    const handleEnroll = async (event: React.MouseEvent, courseId: string) => {
         event.preventDefault();
+        await enrollmentsClient.enrollUserInCourse(currentUser._id, courseId);
+
         dispatch(enrollInCourse({
             user: currentUser._id,
             course: courseId
         }));
     };
 
-    const handleUnenroll = (event: React.MouseEvent, courseId: string) => {
+    const handleUnenroll = async (event: React.MouseEvent, courseId: string) => {
         event.preventDefault();
-        dispatch(unenrollFromCourse({
-            user: currentUser._id,
-            course: courseId
-        }));
+        
+            // 调用新实现的取消注册 API
+            await enrollmentsClient.unenrollUserFromCourse(
+                currentUser._id, 
+                courseId
+            );
+            
+            // 更新 Redux 状态（两种方式任选其一）
+            
+            // 方式 2：重新获取最新注册列表（更可靠）
+            // await fetchEnrollments();
+            dispatch(unenrollFromCourse({
+                user: currentUser._id,
+                course: courseId
+            }));
+        
     };
 
     const isEnrolled = (courseId: string) => {
