@@ -1,18 +1,13 @@
-import { useParams } from "react-router-dom";
-import * as db from "../../Database";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// import { useParams } from "react-router-dom";
+// import * as db from "../../Database";
 import { FaUserCircle } from "react-icons/fa";
-
-export default function PeopleTable() {
-    const { cid } = useParams();
-    const { users, enrollments } = db;
-
-    console.log("Users:", users);
-    console.log("Enrollments:", enrollments);
-
-    if (!Array.isArray(users) || !Array.isArray(enrollments)) {
-        return <div>Error: Users or enrollments data is not available.</div>;
-    }
-
+import PeopleDetails from "./Details";
+import { Link } from "react-router";
+export default function PeopleTable({ users = [] }: { users?: any[] }) {
+    // const { cid } = useParams();
+    // const { users, enrollments } = db;
+    console.log(users);
     return (
         <div id="wd-people-table">
             <table className="table">
@@ -27,16 +22,16 @@ export default function PeopleTable() {
                     </tr>
                 </thead>
                 <tbody>
+                    <PeopleDetails />
                     {users
-                        .filter((usr) =>
-                            enrollments.some((enrollment) => enrollment.user === usr._id && enrollment.course === cid)
-                        )
                         .map((user) => (
                             <tr key={user._id}>
                                 <td className="wd-full-name text-nowrap">
-                                    <FaUserCircle className="me-2 fs-1 text-secondary" />
-                                    <span className="wd-first-name">{user.firstName}</span>
-                                    <span className="wd-last-name">{user.lastName}</span>
+                                    <Link to={`/Kambaz/Account/Users/${user._id}`} className="text-decoration-none">
+                                        <FaUserCircle className="me-2 fs-1 text-secondary" />
+                                        <span className="wd-first-name">{user.firstName}</span>
+                                        <span className="wd-last-name">{user.lastName}</span>
+                                    </Link>
                                 </td>
                                 <td className="wd-login-id">{user.loginId}</td>
                                 <td className="wd-section">{user.section}</td>
