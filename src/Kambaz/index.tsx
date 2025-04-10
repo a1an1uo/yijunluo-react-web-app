@@ -7,13 +7,15 @@ import "./styles.css";
 import KambazNavigation from "./Navigation";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "./Account/ProtectedRoute";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Session from "./Account/Session";
-import * as userClient from "./Account/client";
 import * as courseClient from "./Courses/client"
+import * as enrollmentsClient from "./client"
+import { enrollInCourse } from "./EnrollmentReducer";
 
 export default function Kambaz() {
     // const { courses } = useSelector((state: any) => state.coursesReducer);
+    const dispatch = useDispatch();
     const [courses, setCourses] = useState<any>([]);
     const [course, setCourse] = useState<any>({
         _id: "0", name: "New Course", number: "New Number",
@@ -38,9 +40,17 @@ export default function Kambaz() {
 
 
     const addNewCourse = async () => {
-        const newCourse = await userClient.createCourse(courses);
+        const newCourse = await courseClient.createCourse(courses);
         setCourses([...courses, newCourse]);
         console.log("hihao")
+
+        await enrollmentsClient.enrollUserInCourse(currentUser._id, newCourse._id);
+
+        // Update Redux state
+        dispatch(enrollInCourse({
+            user: currentUser._id,
+            course: newCourse._id
+        }));
     };
 
     const deleteCourse = async (courseId: string) => {
