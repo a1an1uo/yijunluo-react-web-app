@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
-import * as db from "../../Database";
 import { useDispatch, useSelector } from "react-redux";
 import { addAssignment, updateAssignment } from "./reducer";
 import { useState } from "react";
@@ -11,10 +10,7 @@ import * as assignmentsClient from "./client"
 export default function AssignmentEditor() {
     const dispatch = useDispatch();
     const { cid, aid } = useParams();
-    //const assignment = db.assignments.find((assignment) => assignment._id === aid);
     const assignments = useSelector((state: any) => state.assignmentsReducer);
-    console.log(db.assignments)
-    console.log(assignments.assignments)
     const assignment = assignments.assignments.find((assignment: any) => assignment._id === aid);
 
     const [title, setTitle] = useState(assignment?.title || "");
@@ -22,7 +18,7 @@ export default function AssignmentEditor() {
     const [points, setPoints] = useState(assignment?.points || 0);
     const [dueDate, setDueDate] = useState(assignment?.dueDate || "");
     const [startTime, setStartTime] = useState(assignment?.startTime || "");
-    const [availableUntil, setAvailableUntil] = useState("");
+
 
     const createAssignmentForCourse = async () => {
         if (!cid) return;
@@ -32,7 +28,6 @@ export default function AssignmentEditor() {
             points,
             dueDate,
             startTime,
-            availableUntil,
             course: cid,
         };
         const assignment = await coursesClient.createAssignmentForCourse(cid, newAssignment);
@@ -52,7 +47,6 @@ export default function AssignmentEditor() {
             points,
             dueDate,
             startTime,
-            availableUntil,
             course: cid,
         };
 
@@ -111,16 +105,6 @@ export default function AssignmentEditor() {
                             type="date"
                             value={startTime}
                             onChange={(e) => setStartTime(e.target.value)}
-                        />
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="wd-available-until" className="mb-3">
-                    <Form.Label column sm={2}>Available Until</Form.Label>
-                    <Col sm={10}>
-                        <Form.Control
-                            type="date"
-                            value={availableUntil}
-                            onChange={(e) => setAvailableUntil(e.target.value)}
                         />
                     </Col>
                 </Form.Group>

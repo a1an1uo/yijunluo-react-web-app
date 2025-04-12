@@ -8,7 +8,7 @@ import { FaAlignJustify } from "react-icons/fa";
 import CourseNavigation from "./Navigation";
 import PeopleTable from "./People/Table";
 import { useState, useEffect } from "react";
-import * as accountClient from "../Account/client"
+import * as courseClient from "../Courses/client"
 
 export default function Courses({ courses }: { courses: any[]; }) {
     const { cid } = useParams();
@@ -17,7 +17,7 @@ export default function Courses({ courses }: { courses: any[]; }) {
     const [users, setUsers] = useState<any[]>([]);
     const { uid } = useParams();
     const fetchUsers = async () => {
-        const users = await accountClient.findAllUsers();
+        const users = await courseClient.findUsersForCourse(cid!);
         setUsers(users);
     };
     useEffect(() => {
